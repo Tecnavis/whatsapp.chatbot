@@ -77,13 +77,18 @@ export const ChatBotStart = async (req, res) => {
       };
 
       if (!responseSent) {
-        res.status(200).json({ userInfo });
+        console.log("Sending user info");
+        res
+          .status(200)
+          .json({ status: true, message: "Client is ready", userInfo });
         responseSent = true;
       }
     } catch (err) {
       console.error("Error fetching user info:", err);
       if (!responseSent) {
-        res.status(500).json({ error: "Failed to fetch user info" });
+        res
+          .status(500)
+          .json({ status: false, message: "Failed to fetch user info" });
         responseSent = true;
       }
     }
