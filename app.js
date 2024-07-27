@@ -1,4 +1,5 @@
 import express from "express";
+import compression from "compression";
 import cors from "cors";
 import chatRouter from "./router/chatBot/chatRouter.js";
 import { mongodb } from "./config/db.js";
@@ -7,6 +8,8 @@ const app = express();
 const PORT = 3000;
 
 dotenv.config();
+
+app.use(compression()); // Compress all routes
 
 app.use(express.static("public"));
 app.use(express.json());
