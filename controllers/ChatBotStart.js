@@ -11,7 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Function to safely unlink a file with retries
-async function safeUnlink(filePath, retries = 3, delay = 1000) {
+async function safeUnlink(filePath, retries = 10, delay = 1000) {
   for (let i = 0; i < retries; i++) {
     try {
       await fs.unlink(filePath);
