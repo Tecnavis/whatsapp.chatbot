@@ -126,6 +126,37 @@ export const ChatBotStart = async (req, res) => {
     }
   });
 
+  client.on("message", async (msg) => {
+    try {
+      console.log("Received a message:", msg.body);
+      const chat = await msg.getChat();
+      console.log("Chat details:", chat);
+
+      const message = msg.body.toLowerCase();
+      const responses = {
+        hi: '👋 **Welcome to Aurify!** 🌟\n\nWe’re thrilled to have you here! How can we assist you today?\n1️⃣ **Explore Our Products**\n2️⃣ **Get Sales Support**\nJust reply with the number of your choice or type *"Menu"* to see the options again.',
+        1: '🔍 **Product Enquiry** 🛍️\n\nChoose from our exciting options below:\n• **Bullion View** 💹 - Get real-time insights into the bullion market.\n• **Scratch & Win** 🎟️ - Try our scratch cards and win amazing prizes!\n• **KYC System** 🛡️ - Ensure secure and compliant customer verification.\nReply with the name of the option or type *"Menu"* to return to the main menu.',
+        2: "📞 **Sales Support** 🤝\n\nNeed assistance? Contact our dedicated support team:\n📞 **Phone:** *123-456-7890*\n✉️ **Email:** *sales@aurify.com*\nWe’re here to help you with anything you need!",
+        "bullion view":
+          '📊 **Bullion View** 🌟\n\nGet exclusive real-time insights into the bullion market! 📈\nWould you like to book a demo to see it in action?\nReply with *"Book Demo"* to schedule a demo or *"More Info"* for additional details. Type *"Menu"* to return to the main menu.',
+        "book demo":
+          '📅 **Book a Demo** 🗓️\n\nWe’d love to show you our Bullion View live! To schedule your demo, please provide us with your preferred date and time.\nAlternatively, you can reach out to us directly:\n📞 **Phone:** *123-456-7890*\n✉️ **Email:** *demo@aurify.com*\nType *"Menu"* to return to the main menu.',
+        "scratch & win":
+          '🎉 **Scratch & Win** 🎁\n\nFeeling lucky? Try out our scratch cards and reveal exciting prizes! 🎊\nReply with *"Participate"* to join the fun or type *"Menu"* to return to the main menu.',
+        "kyc system":
+          '🔒 **KYC System** ✅\n\nOur KYC system ensures secure and compliant customer verification. 🔍\nFor more information or to get started, reply with *"Get Started"* or type *"Menu"* to return to the main menu.',
+        menu: '📋 **Main Menu** 🔄\n\nPlease select an option to proceed:\n1️⃣ **Explore Our Products**\n2️⃣ **Get Sales Support**\nReply with the number of your choice or type *"Hi"* or *"Hello"* to start over.',
+      };
+
+      const response =
+        responses[message] ||
+        '❓ **Invalid Option** 🚫\n\nIt looks like there was a mistake. Please type *"Hi"* or *"Hello"* to start again or choose an option from the menu.';
+      await chat.sendMessage(response);
+    } catch (err) {
+      console.error("Error handling message:", err);
+    }
+  });
+
   client.on('auth_failure', message => {
     console.error('Authentication failure:', message);
     sendResponse(500, { status: false, message: 'Authentication failed' });
@@ -143,6 +174,7 @@ export const ChatBotStart = async (req, res) => {
     console.error('Error initializing client:', err);
     sendResponse(500, { status: false, message: 'Failed to initialize client' });
   }
+  
 };
 
 export default ChatBotStart;
